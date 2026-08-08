@@ -1,0 +1,8 @@
+mirrors:
+    target:
+        - legacy
+    requires:
+        
+    commands:
+        - debian: 
+            - echo test

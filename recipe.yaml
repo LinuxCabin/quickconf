@@ -1,0 +1,8 @@
+system_configuration:
+    target:
+        - legacy
+    requires:
+        
+    commands:
+        - legacy: # All targets above
+            - echo test
