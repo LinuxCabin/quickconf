@@ -9,20 +9,24 @@ In QuickConf, transactions are broken down into steps. Each step has its targeti
 QuickConf can be configured through .yaml files. Here is an example.
 
 ```yaml
-the_name_of_the_step:
+optional: true
+# When true, if multiple steps in this file match the current system,
+# the user will be prompted to choose one to run.
+
+step_a:
     target:
         - legacy
-        # or
-        # - debian
-        # - fedora>=44
-        # ...
     requires:
         - legacy:
-            - git
-        # or
-        # ...
+            git
     commands:
-        - legacy: # All targets above
-            - git clone https://github.com/LinuxCabin/quickconf
-            - =subtasks/subtask1
+        - legacy:
+            - echo "run step a"
+
+step_b:
+    target:
+        - legacy
+    commands:
+        - legacy:
+            - echo "run step b"
 ```

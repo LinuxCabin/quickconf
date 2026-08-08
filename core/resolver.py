@@ -28,8 +28,11 @@ def parse_steps(data):
     if not isinstance(data, dict):
         raise TypeError("step data must be a mapping")
 
+    optional = bool(data.get("optional", False))
     steps = {}
     for name, config in data.items():
+        if name == "optional":
+            continue
         if not isinstance(config, dict):
             raise TypeError(f"step '{name}' must be a mapping")
 
@@ -54,9 +57,10 @@ def parse_steps(data):
             "target": list(target),
             "requires": _parse_requires(requires),
             "commands": parsed_commands,
+            "optional": bool(config.get("optional", False)),
         }
 
-    return steps
+    return {"steps": steps, "optional": optional}
 
 
 def load_steps_from_yaml(text):

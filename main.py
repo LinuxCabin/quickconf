@@ -13,10 +13,43 @@ print("版本：", SYSTEM["distro_ver"])
 print("基于：", SYSTEM["distro_like"])
 
 
+def _select_optional_steps(step_names):
+    if len(step_names) <= 1:
+        return step_names
+
+    print("请选择要执行的步骤：")
+    print(f"0. 不执行")
+    for index, name in enumerate(step_names, 1):
+        print(f"{index}. {name}")
+    
+    while True:
+        choice = input("输入序号: ").strip()
+        if not choice:
+            return []
+
+        try:
+            selected = int(choice)
+        except ValueError:
+            print("输入无效，请重新输入")
+            continue
+
+        if selected == 0:
+            return []
+
+        if 1 <= selected <= len(step_names):
+            return [step_names[selected - 1]]
+
+        print("输入超出范围，请重新输入")
+
+
 def run_task(path):
     with open(path, encoding="utf-8") as handle:
-        conf = core.resolver.load_steps_from_yaml(handle.read())
+        parsed_conf = core.resolver.load_steps_from_yaml(handle.read())
 
+    conf = parsed_conf["steps"]
+    optional = parsed_conf["optional"]
+
+    matching_steps = []
     for step_name, step in conf.items():
         if not step.get("target"):
             continue
@@ -25,8 +58,15 @@ def run_task(path):
             core.info.distro_match(target, SYSTEM["distro"], SYSTEM["distro_like"])
             for target in step["target"]
         )
-        if not matched:
-            continue
+        if matched:
+            matching_steps.append((step_name, step))
+
+    if optional and len(matching_steps) > 1:
+        selected_names = set(_select_optional_steps([name for name, _ in matching_steps]))
+        matching_steps = [(name, step) for name, step in matching_steps if name in selected_names]
+
+    for step_name, step in matching_steps:
+        print(f"执行任务：{step_name}")
 
         for item in step.get("requires", []):
             target = item.get("target", "legacy")

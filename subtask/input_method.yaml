@@ -1,0 +1,36 @@
+optional: true
+
+安装Fcitx5输入法:
+    target:
+        - legacy
+    requires:
+        - legacy:
+            - fcitx5
+            - fcitx5-rime
+    commands:
+        - legacy:
+            #- RIME_PATH=~/.local/share/fcitx5/rime/
+            - rm ~/.local/share/fcitx5/rime/* -r 
+            - wget https://mirror.nju.edu.cn/github-release/iDvel/rime-ice/LatestRelease/full.zip
+            - unzip full.zip -d ~/.local/share/fcitx5/rime/
+
+安装IBus输入法:
+    target:
+        - legacy
+    requires:
+        - legacy:
+            - ibus
+            - ibus-rime
+    commands:
+        - legacy:
+            #- RIME_PATH=~/.config/ibus/rime/
+            - rm ~/.config/ibus/rime/* -r 
+            - wget https://mirror.nju.edu.cn/github-release/iDvel/rime-ice/LatestRelease/full.zip
+            - unzip full.zip -d ~/.config/ibus/rime/
+
+AUR助手:
+    target:
+        - arch
+    commands:
+        - arch:
+            - =aur.yaml

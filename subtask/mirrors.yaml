@@ -1,8 +1,20 @@
-mirrors:
+系统换源:
     target:
         - legacy
     requires:
         
     commands:
-        - debian: 
-            - echo test
+        - legacy:
+            - sudo bash <(curl -sSL https://linuxmirrors.cn/main.sh)
+
+Flathub换源:
+    target:
+        - legacy
+    requires:
+        - legacy:
+            - flatpak
+    commands:
+        - legacy:
+            - sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+            - sudo flatpak remote-modify flathub --url=https://mirrors.ustc.edu.cn/flathub
+
